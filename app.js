@@ -43,13 +43,6 @@ app.post("/signIn",async(req,res)=>{
 
 
 
-
-
-
-
-
-
-
 //signUp
   app.post("/signUp",async(req,res)=>{
 
@@ -79,7 +72,22 @@ console.log(check)
   
 })
 
-  
+app.post("/add",async(req,res)=>{
+  let input=req.body
+  let token=req.headers.token
+  jwt.verify(token,"blogapp",async(error,decoded)=>{
+      if(decoded && decoded.email){
+          let result=new postModel(input)
+          await result.save()
+          res.json({"status":"success"})
+      }
+      else
+      {
+          res.json({"status":"Invalid Authentication"})
+      }
+  })
+})
+
    app.listen(3030,()=>{
     console.log("server started")
    })
